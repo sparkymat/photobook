@@ -6,6 +6,9 @@ photobook:
 photobook-worker:
  	CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o photobook-worker worker/main.go
 
+photobook-scheduler:
+ 	CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o photobook-scheduler scheduler/main.go
+
 start-app:
 	# Install reflex with 'go install github.com/cespare/reflex@latest'
 	# Install godotenv with 'go install github.com/joho/godotenv/cmd/godotenv@latest'
@@ -13,6 +16,9 @@ start-app:
 
 start-worker:
 	reflex -s -r '\.go$$' -- godotenv -f .env go run worker/main.go
+
+start-scheduler:
+	reflex -s -r '\.go$$' -- godotenv -f .env go run scheduler/main.go
 
 start-view:
 	# Install reflex with 'go install github.com/cespare/reflex@latest'
@@ -28,4 +34,4 @@ db-schema-dump:
 sqlc-gen:
 	sqlc generate
 
-.PHONY: photobook photobook-worker start-app start-worker start-view db-migrate db-schema-dump sqlc-gen
+.PHONY: photobook photobook-worker photobook-scheduler start-app start-worker start-scheduler start-view db-migrate db-schema-dump sqlc-gen
