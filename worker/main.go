@@ -56,6 +56,7 @@ func main() {
 	mux := asynq.NewServeMux()
 
 	mux.Handle(tasks.TypeRescanFolders, tasks.NewFoldersRescanner(photoService))
+	mux.Handle(tasks.TypeReadPhotoFile, tasks.NewPhotoFileReader(photoService))
 
 	if err := srv.Run(mux); err != nil {
 		log.Fatalf("could not run server: %v", err)

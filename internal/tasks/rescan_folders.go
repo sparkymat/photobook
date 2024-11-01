@@ -10,6 +10,7 @@ import (
 
 type photoService interface {
 	RescanFolders(ctx context.Context) error
+	ReadPhotoFile(ctx context.Context, path string) error
 }
 
 const (

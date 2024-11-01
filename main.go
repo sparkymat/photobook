@@ -47,11 +47,10 @@ func main() {
 
 	taskInfo, err := asynqClient.Enqueue(rescanTask, asynq.Unique(time.Hour))
 	if err != nil {
-		log.Error(err)
-		panic(err)
+		log.Error(err) // Don't panic
+	} else {
+		log.Infof("queued task %s for rescanning folders: queue=%s", taskInfo.ID, taskInfo.Queue)
 	}
-
-	log.Infof("queued task %s for rescanning folders: queue=%s", taskInfo.ID, taskInfo.Queue)
 
 	userService := user.New(db)
 	photoService := photo.New(cfg.PhotoFolders(), db, asynqClient)
