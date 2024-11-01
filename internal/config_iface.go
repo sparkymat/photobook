@@ -8,5 +8,4 @@ type ConfigService interface {
 	ReverseProxyAuthentication() bool
 	ProxyAuthEmailHeader() string
 	ProxyAuthNameHeader() string
-	StorageFolder() string
 }

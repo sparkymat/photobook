@@ -3,8 +3,10 @@ package config
 import (
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/caarlos0/env/v11"
+	"github.com/samber/lo"
 )
 
 func New() (*Service, error) {
@@ -27,20 +29,27 @@ type Service struct {
 }
 
 type envValues struct {
-	JWTSecret                  string `env:"JWT_SECRET,required"`
-	SessionSecret              string `env:"SESSION_SECRET,required"`
-	DatabaseName               string `env:"DATABASE_NAME,required"`
 	DatabaseHostname           string `env:"DATABASE_HOSTNAME,required"`
-	DatabasePort               string `env:"DATABASE_PORT,required"`
-	DatabaseUsername           string `env:"DATABASE_USERNAME"`
+	DatabaseName               string `env:"DATABASE_NAME,required"`
 	DatabasePassword           string `env:"DATABASE_PASSWORD"`
+	DatabasePort               string `env:"DATABASE_PORT,required"`
 	DatabaseSSLMode            bool   `env:"DATABASE_SSL_MODE"            envDefault:"true"`
+	DatabaseUsername           string `env:"DATABASE_USERNAME"`
 	DisableRegistration        bool   `env:"DISABLE_REGISTRATION"         envDefault:"false"`
-	ReverseProxyAuthentication bool   `env:"REVERSE_PROXY_AUTHENTICATION" envDefault:"false"`
+	JWTSecret                  string `env:"JWT_SECRET,required"`
+	PhotoFolders               string `env:"PHOTO_FOLDERS"`
 	ProxyAuthEmailHeader       string `env:"PROXY_AUTH_EMAIL_HEADER"      envDefault:"Remote-Email"`
 	ProxyAuthNameHeader        string `env:"PROXY_AUTH_NAME_HEADER"       envDefault:"Remote-Name"`
 	RedisURL                   string `env:"REDIS_URL,required"`
-	StorageFolder              string `env:"STORAGE_FOLDER,required"`
+	ReverseProxyAuthentication bool   `env:"REVERSE_PROXY_AUTHENTICATION" envDefault:"false"`
+	SessionSecret              string `env:"SESSION_SECRET,required"`
+}
+
+func (s *Service) PhotoFolders() []string {
+	paths := strings.Split(s.envValues.PhotoFolders, ",")
+	paths = lo.Filter(paths, func(path string, _ int) bool { return path != "" })
+
+	return paths
 }
 
 func (s *Service) JWTSecret() string {
@@ -100,8 +109,4 @@ func (s *Service) ProxyAuthNameHeader() string {
 
 func (s *Service) RedisURL() string {
 	return s.envValues.RedisURL
-}
-
-func (s *Service) StorageFolder() string {
-	return s.envValues.StorageFolder
 }

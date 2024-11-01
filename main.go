@@ -9,6 +9,7 @@ import (
 	"github.com/sparkymat/photobook/internal/database"
 	"github.com/sparkymat/photobook/internal/dbx"
 	"github.com/sparkymat/photobook/internal/route"
+	"github.com/sparkymat/photobook/internal/service/photo"
 	"github.com/sparkymat/photobook/internal/service/user"
 )
 
@@ -36,9 +37,11 @@ func main() {
 	defer asynqClient.Close()
 
 	userService := user.New(db)
+	photoService := photo.New(cfg.PhotoFolders(), db, asynqClient)
 
 	services := internal.Services{
-		User: userService,
+		User:  userService,
+		Photo: photoService,
 	}
 
 	e := echo.New()
