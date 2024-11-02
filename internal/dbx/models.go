@@ -9,6 +9,24 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Photo struct {
+	ID               uuid.UUID
+	Path             string
+	ThumbnailPath    pgtype.Text
+	FileType         string
+	TakenAt          pgtype.Timestamp
+	TakenLat         pgtype.Float8
+	TakenLon         pgtype.Float8
+	TakenIso         pgtype.Int4
+	TakenExposure    pgtype.Text
+	TakenFocalLength pgtype.Text
+	TakenFNumber     pgtype.Text
+	ResolutionWidth  pgtype.Int4
+	ResolutionHeight pgtype.Int4
+	CreatedAt        pgtype.Timestamp
+	UpdatedAt        pgtype.Timestamp
+}
+
 type SchemaMigration struct {
 	Version int64
 	Dirty   bool

@@ -35,6 +35,29 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: photos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.photos (
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    path text NOT NULL,
+    thumbnail_path text,
+    file_type text NOT NULL,
+    taken_at timestamp without time zone,
+    taken_lat double precision,
+    taken_lon double precision,
+    taken_iso integer,
+    taken_exposure text,
+    taken_focal_length text,
+    taken_f_number text,
+    resolution_width integer,
+    resolution_height integer,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -59,6 +82,14 @@ CREATE TABLE public.users (
 
 
 --
+-- Name: photos photos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.photos
+    ADD CONSTRAINT photos_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -80,6 +111,13 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: photos photos_updated_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER photos_updated_at BEFORE UPDATE ON public.photos FOR EACH ROW EXECUTE FUNCTION public.moddatetime('updated_at');
 
 
 --
